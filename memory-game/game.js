@@ -1,5 +1,6 @@
 var gamePattern = [];
 var buttonColors = ["red", "blue", "green", "yellow"];
+var userClickedPattern = [];
 
 var redAudio = new Audio("sounds/red.mp3");
 var blueAudio = new Audio("sounds/blue.mp3");
@@ -11,12 +12,8 @@ function nextSequence() {
   return Math.floor(Math.random() * 4);
 }
 
-// animateChosenBtn animate button display & play sound for the random chosen button
-function animateChosenBtn(chosenColor) {
-  $("#" + chosenColor).fadeOut(100);
-  $("#" + chosenColor).fadeIn(100);
-
-  switch (chosenColor) {
+function playBtnSound(color) {
+  switch (color) {
     case "red":
       redAudio.play();
       break;
@@ -32,6 +29,28 @@ function animateChosenBtn(chosenColor) {
   }
 }
 
+// animateChosenBtn animate button display & play sound for the random chosen button
+function animateChosenBtn(chosenColor) {
+  $("#" + chosenColor).fadeOut(100);
+  $("#" + chosenColor).fadeIn(100);
+
+  playBtnSound(chosenColor);
+}
+
+function animateClickedBtn() {
+  for (let i = 0; i < buttonColors.length; i++) {
+    $("#" + buttonColors[i]).click(function () {
+      $("#" + buttonColors[i]).addClass("pressed");
+      setTimeout(function () {
+        $("#" + buttonColors[i]).removeClass("pressed");
+      }, 100);
+
+      playBtnSound(buttonColors[i]);
+      userClickedPattern.push(buttonColors[i]);
+    });
+  }
+}
+
 // chooseRandomBtn choose a random colored-button and play animation for the chosen button
 function chooseRandomBtn() {
   var randomChosenColor = buttonColors[nextSequence()];
@@ -39,3 +58,6 @@ function chooseRandomBtn() {
 
   animateChosenBtn(randomChosenColor);
 }
+
+animateClickedBtn();
+// chooseRandomBtn();
